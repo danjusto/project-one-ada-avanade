@@ -17,7 +17,7 @@ public class JwtService {
     private static SecretKey jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     public String generateToken(String username) {
         var now = LocalDateTime.now();
-        var expiration = now.plusMinutes(30);
+        var expiration = now.plusHours(2);
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date(now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))

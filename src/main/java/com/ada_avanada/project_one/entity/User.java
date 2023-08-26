@@ -36,7 +36,7 @@ public class User implements UserDetails {
     private LocalDateTime registerDate;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Address> addresses = new ArrayList<Address>();
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Order> orders = new ArrayList<Order>();
 
     public User(UserRequestDTO dto) {

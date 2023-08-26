@@ -1,13 +1,16 @@
 package com.ada_avanada.project_one.service;
 
+import com.ada_avanada.project_one.dto.ItemsProductDTO;
 import com.ada_avanada.project_one.dto.OrderDTO;
 import com.ada_avanada.project_one.entity.Order;
 import com.ada_avanada.project_one.repository.OrderRepository;
+import com.ada_avanada.project_one.repository.ProductRepository;
 import com.ada_avanada.project_one.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,8 +31,14 @@ public class OrderService {
             throw new EntityNotFoundException("User not found");
         }
         var order = new Order(dto, userOp.get());
-        var orderCreated = this.orderRepository.save(order);
-        return orderCreated.dto();
+        var itemsList = new ArrayList<ItemsProductDTO>();
+        for (var element : dto.orderItems()) {
+            var item = this.orderItemsService.create(element, order);
+            itemsList.add(item);
+        }
+        order.setOrderItems(itemsList);
+        var createdOrder = this.orderRepository.save(order);
+        return createdOrder.dto();
     }
 
     public OrderDTO getOne(Long id) {

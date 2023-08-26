@@ -1,6 +1,8 @@
 package com.ada_avanada.project_one.entity;
 
+import com.ada_avanada.project_one.dto.ItemsProductDTO;
 import com.ada_avanada.project_one.dto.OrderItemsDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,10 +23,10 @@ public class OrderItems {
     private Product product;
     private Integer qty;
 
-    public OrderItems(OrderItemsDTO dto, Product product, Order order) {
+    public OrderItems(ItemsProductDTO dto) {
         this.qty = dto.qty();
-        this.product = product;
-        this.order = order;
+        this.product = dto.product();
+        this.order = dto.order();
     }
 
     public OrderItemsDTO dto() {

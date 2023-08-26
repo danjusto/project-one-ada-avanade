@@ -17,7 +17,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public TokenDTO login(@RequestBody LoginDTO dto) {
-        return loginService.login(dto);
+    public TokenDTO login(@RequestBody LoginDTO body) {
+        return this.loginService.login(body);
     }
 }

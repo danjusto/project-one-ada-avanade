@@ -5,7 +5,6 @@ import com.ada_avanada.project_one.dto.TokenDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private AuthenticationManager authManager;
     private JwtService jwtService;
-    public LoginService(AuthenticationManager authManager, JwtService jwtService, PasswordEncoder passwordEncoder) {
+    public LoginService(AuthenticationManager authManager, JwtService jwtService) {
         this.authManager = authManager;
         this.jwtService = jwtService;
     }

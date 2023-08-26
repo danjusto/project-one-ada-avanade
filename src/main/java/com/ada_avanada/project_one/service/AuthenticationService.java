@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationService implements UserDetailsService {
-    private UserRepository repository;
-    public AuthenticationService(UserRepository repository) {
-        this.repository = repository;
+    private UserRepository userRepository;
+    public AuthenticationService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var userOptional = repository.findByUsername(username);
+        var userOptional = this.userRepository.findByUsername(username);
         if (userOptional.isEmpty()) {
             throw new UsernameNotFoundException("User not found.");
         }

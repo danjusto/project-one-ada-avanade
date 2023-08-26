@@ -1,4 +1,14 @@
 package com.ada_avanada.project_one.dto;
 
-public record OrderItemsDTO(Long id, Long orderId, Long productId, Integer qty) {
-}
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
+public record OrderItemsDTO(
+        Long id,
+        @NotNull
+        Long orderId,
+        @NotNull
+        Long productId,
+        @NotNull
+        @Min(1)
+        Integer qty) {}

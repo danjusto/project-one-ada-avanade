@@ -1,4 +1,25 @@
 package com.ada_avanada.project_one.dto;
 
-public record UserRequestDTO(String name, String username, String password, String cpf, String email, String phone, AddressRequestDTO address) {
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.br.CPF;
+
+public record UserRequestDTO(
+        @NotBlank
+        String name,
+        @NotBlank
+        String username,
+        @NotBlank
+        @Size(min = 8, message = "The password must have at least 8 characters")
+        String password,
+        @CPF
+        String cpf,
+        @Email
+        String email,
+        @NotBlank
+        @Pattern(regexp = "^\\d{11}$")
+        String phone,
+        @NotNull
+        @Valid
+        AddressRequestDTO address) {
 }
