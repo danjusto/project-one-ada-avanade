@@ -2,12 +2,10 @@ package com.ada_avanada.project_one.service;
 
 import com.ada_avanada.project_one.dto.AddressRequestDTO;
 import com.ada_avanada.project_one.dto.AddressResponseDTO;
-import com.ada_avanada.project_one.dto.UserRequestDTO;
-import com.ada_avanada.project_one.dto.UserResponseDTO;
 import com.ada_avanada.project_one.entity.Address;
-import com.ada_avanada.project_one.entity.User;
 import com.ada_avanada.project_one.repository.AddressRepository;
 import com.ada_avanada.project_one.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -24,26 +22,41 @@ public class AddressService {
     }
 
     @Transactional
-    public AddressResponseDTO create(Long userId, AddressRequestDTO dto) {
-        var user = this.userRepository.getReferenceById(userId);
-        var address = new Address(dto, user);
+    public AddressResponseDTO create(AddressRequestDTO dto) {
+        var userOp = this.userRepository.findById(dto.userId());
+        if (userOp.isEmpty()) {
+            throw new EntityNotFoundException("User not found");
+        }
+        var address = new Address(dto, userOp.get());
         var registeredAddress = this.addressRepository.save(address);
         return registeredAddress.dto();
     }
 
     public AddressResponseDTO getOne(Long id) {
-        Optional<Address> userOptional = this.addressRepository.findById(id);
-        return userOptional.get().dto();
+        Optional<Address> addressOptional = this.addressRepository.findById(id);
+        if (addressOptional.isEmpty()) {
+            throw new EntityNotFoundException("Address not found.");
+        }
+        return addressOptional.get().dto();
     }
 
+    @Transactional
     public void remove(Long id) {
         this.addressRepository.deleteById(id);
     }
 
+    @Transactional
     public AddressResponseDTO edit(Long id, AddressRequestDTO dto) {
-        var address = addressRepository.getReferenceById(id);
-        address.edit(dto);
-        this.addressRepository.save(address);
-        return address.dto();
+        Optional<Address> addressOptional = this.addressRepository.findById(id);
+        if (addressOptional.isEmpty()) {
+            throw new EntityNotFoundException("Address not found.");
+        }
+        addressOptional.get().edit(dto);
+        this.addressRepository.save(addressOptional.get());
+        return addressOptional.get().dto();
+    }
+
+    public List<AddressResponseDTO> getAll() {
+        return addressRepository.findAllByOrderByIdAsc().stream().map(Address::dto).toList();
     }
 }

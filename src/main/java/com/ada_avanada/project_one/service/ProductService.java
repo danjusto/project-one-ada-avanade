@@ -35,7 +35,7 @@ public class ProductService {
 
     public ProductDTO getOne(Long id) {
         var productOp = this.productRepository.findById(id);
-        if (!productOp.isPresent()) {
+        if (productOp.isEmpty()) {
             throw new EntityNotFoundException("Product not found.");
         }
         return productOp.get().dto();
@@ -43,10 +43,13 @@ public class ProductService {
 
     @Transactional
     public ProductDTO edit(Long id, ProductDTO dto) {
-        var product = productRepository.getReferenceById(id);
-        product.edit(dto);
-        productRepository.save(product);
-        return product.dto();
+        var productOp = this.productRepository.findById(id);
+        if (productOp.isEmpty()) {
+            throw new EntityNotFoundException("Product not found.");
+        }
+        productOp.get().edit(dto);
+        productRepository.save(productOp.get());
+        return productOp.get().dto();
     }
 
     @Transactional
@@ -54,10 +57,14 @@ public class ProductService {
         this.productRepository.deleteById(id);
     }
 
+    @Transactional
     public ProductDTO decrementStock(Long id, DecrementStockDTO dto) {
-        var product = productRepository.getReferenceById(id);
-        product.decrementStock(dto);
-        productRepository.save(product);
-        return product.dto();
+        var productOp = this.productRepository.findById(id);
+        if (productOp.isEmpty()) {
+            throw new EntityNotFoundException("Product not found.");
+        }
+        productOp.get().decrementStock(dto);
+        productRepository.save(productOp.get());
+        return productOp.get().dto();
     }
 }

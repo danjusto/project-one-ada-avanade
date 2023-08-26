@@ -4,6 +4,7 @@ import com.ada_avanada.project_one.dto.UserRequestDTO;
 import com.ada_avanada.project_one.dto.UserResponseDTO;
 import com.ada_avanada.project_one.entity.User;
 import com.ada_avanada.project_one.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,14 @@ public class UserService {
     }
 
     public List<UserResponseDTO> getAll() {
-        return this.userRepository.findAll().stream().map(User::dto).toList();
+        return this.userRepository.findAllByOrderByIdAsc().stream().map(User::dto).toList();
     }
 
     public UserResponseDTO getOne(Long id) {
         Optional<User> userOptional = this.userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new EntityNotFoundException("User not found.");
+        }
         return userOptional.get().dto();
     }
 
@@ -44,9 +48,12 @@ public class UserService {
 
     @Transactional
     public UserResponseDTO edit(Long id, UserRequestDTO dto) {
-        var user = userRepository.getReferenceById(id);
-        user.edit(dto);
-        userRepository.save(user);
-        return user.dto();
+        Optional<User> userOptional = this.userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new EntityNotFoundException("User not found.");
+        }
+        userOptional.get().edit(dto);
+        userRepository.save(userOptional.get());
+        return userOptional.get().dto();
     }
 }

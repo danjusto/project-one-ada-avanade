@@ -3,7 +3,6 @@ package com.ada_avanada.project_one.repository;
 import com.ada_avanada.project_one.dto.SearchDTO;
 import com.ada_avanada.project_one.entity.Product;
 import com.ada_avanada.project_one.entity.QProduct;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -40,6 +39,7 @@ public class ProductFilterRepository extends QuerydslRepositorySupport {
         return new JPAQueryFactory(em)
                 .selectFrom(product)
                 .where(predicates.toArray(new Predicate[0]))
+                .orderBy(product.id.asc())
                 .fetch();
     }
 }

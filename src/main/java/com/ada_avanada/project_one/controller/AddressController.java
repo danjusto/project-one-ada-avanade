@@ -16,15 +16,20 @@ public class AddressController {
         this.service = service;
     }
 
-    @PostMapping("/user/{userId}")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AddressResponseDTO create(@PathVariable Long userId, @RequestBody AddressRequestDTO body) {
-        return service.create(userId, body);
+    public AddressResponseDTO create(@RequestBody AddressRequestDTO body) {
+        return service.create(body);
     }
 
     @GetMapping("/{id}")
     public AddressResponseDTO getOne(@PathVariable Long id) {
         return service.getOne(id);
+    }
+
+    @GetMapping
+    public List<AddressResponseDTO> getAll() {
+        return service.getAll();
     }
 
     @DeleteMapping("/{id}")

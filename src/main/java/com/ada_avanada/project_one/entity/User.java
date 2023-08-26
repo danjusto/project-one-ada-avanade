@@ -30,6 +30,8 @@ public class User implements UserDetails {
     private LocalDate registerDate;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Address> addresses = new ArrayList<Address>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<Order>();
 
     public User(UserRequestDTO dto) {
         this.name = dto.name();
@@ -43,7 +45,7 @@ public class User implements UserDetails {
     }
 
     public UserResponseDTO dto() {
-        return new UserResponseDTO(this.id, this.name, this.username, this.cpf, this.email, this.phone, this.registerDate, this.addresses.stream().map(Address::dto).toList());
+        return new UserResponseDTO(this.id, this.name, this.username, this.cpf, this.email, this.phone, this.registerDate, this.addresses.stream().map(Address::dto).toList(), this.orders.stream().map(Order::dto).toList());
     }
 
     public void edit(UserRequestDTO dto) {
