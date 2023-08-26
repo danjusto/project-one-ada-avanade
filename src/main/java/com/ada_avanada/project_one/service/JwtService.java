@@ -1,46 +1,44 @@
 package com.ada_avanada.project_one.service;
 
 import com.ada_avanada.project_one.entity.User;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import org.springframework.beans.factory.annotation.Value;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import javax.crypto.SecretKey;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Service
 public class JwtService {
-    @Value("${api.security.token.secret}")
-    private String secret;
-    public String generateToken(User user) {
-        try {
-            var algorithm = Algorithm.HMAC256(secret);
-            return JWT.create()
-                    .withIssuer("Shop Avanade-Ada")
-                    .withSubject(user.getUsername())
-                    .withExpiresAt(expirationDate())
-                    .sign(algorithm);
-        } catch (Exception e) {
-            throw new RuntimeException("Token generate failed", e);
-        }
+
+    private static SecretKey jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    public String generateToken(String username) {
+        var now = LocalDateTime.now();
+        var expiration = now.plusMinutes(30);
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date(now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))
+                .setExpiration(new Date(expiration.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))
+                .signWith(jwtSecret)
+                .compact();
     }
 
     public String getSubject(String token) {
-        try {
-            var algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
-                    .withIssuer("Shop Avanade-Ada")
-                    .build()
-                    .verify(token)
-                    .getSubject();
-        } catch (Exception e) {
-            throw new RuntimeException("Invalid or expired token.");
-        }
+        return Jwts.parserBuilder()
+                .setSigningKey(jwtSecret)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
-    private Instant expirationDate() {
-        return LocalDateTime.now().plusHours(12).toInstant(ZoneOffset.of("-03:00"));
+    public Boolean validateToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(jwtSecret)
+                .build()
+                .isSigned(token);
     }
 }

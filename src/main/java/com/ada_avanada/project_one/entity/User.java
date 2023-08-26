@@ -5,10 +5,12 @@ import com.ada_avanada.project_one.dto.UserResponseDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,12 +24,16 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(unique = true)
     private String username;
     private String password;
+    @Column(unique = true)
     private String cpf;
+    @Column(unique = true)
     private String email;
     private String phone;
-    private LocalDate registerDate;
+    @CreationTimestamp
+    private LocalDateTime registerDate;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Address> addresses = new ArrayList<Address>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -40,7 +46,6 @@ public class User implements UserDetails {
         this.cpf = dto.cpf();
         this.email = dto.email();
         this.phone = dto.phone();
-        this.registerDate = LocalDate.now();
         this.addresses.add(new Address(dto.address(), this));
     }
 

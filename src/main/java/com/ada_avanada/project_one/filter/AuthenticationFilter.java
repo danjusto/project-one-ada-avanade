@@ -1,6 +1,7 @@
-package com.ada_avanada.project_one.infra.security;
+package com.ada_avanada.project_one.filter;
 
 import com.ada_avanada.project_one.repository.UserRepository;
+import com.ada_avanada.project_one.service.AuthenticationService;
 import com.ada_avanada.project_one.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,22 +15,22 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-public class SecurityFilter extends OncePerRequestFilter {
+public class AuthenticationFilter extends OncePerRequestFilter {
     private JwtService jwtService;
-    private UserRepository userRepository;
+    private AuthenticationService authService;
 
-    public SecurityFilter(JwtService jwtService, UserRepository userRepository) {
+    public AuthenticationFilter(JwtService jwtService, AuthenticationService authService) {
         this.jwtService = jwtService;
-        this.userRepository = userRepository;
+        this.authService = authService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = getToken(request);
-        if (token != null) {
-            var subject = jwtService.getSubject(token);
-            var user = userRepository.findByUsername(subject);
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.get().getAuthorities());
+        if (this.jwtService.validateToken(token)) {
+            var subject = this.jwtService.getSubject(token);
+            var user = this.authService.loadUserByUsername(subject);
+            var authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
@@ -38,7 +39,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private String getToken(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
         if(authHeader != null) {
-            return authHeader.replace("Bearer ", "");
+            return authHeader.replace("Bearer", "").trim();
         }
         return null;
     }
