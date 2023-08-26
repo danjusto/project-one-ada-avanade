@@ -3,6 +3,7 @@ package com.ada_avanada.project_one.controller;
 import com.ada_avanada.project_one.dto.LoginDTO;
 import com.ada_avanada.project_one.dto.TokenDTO;
 import com.ada_avanada.project_one.service.LoginService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public TokenDTO login(@RequestBody LoginDTO body) {
+    public TokenDTO login(@RequestBody @Valid LoginDTO body) {
         return this.loginService.login(body);
     }
 }

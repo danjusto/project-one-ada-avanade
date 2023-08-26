@@ -6,6 +6,7 @@ import com.ada_avanada.project_one.entity.Order;
 import com.ada_avanada.project_one.repository.OrderRepository;
 import com.ada_avanada.project_one.repository.ProductRepository;
 import com.ada_avanada.project_one.repository.UserRepository;
+import com.ada_avanada.project_one.util.Mail;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,12 @@ public class OrderService {
     private OrderRepository orderRepository;
     private UserRepository userRepository;
     private OrderItemsService orderItemsService;
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository, OrderItemsService orderItemsService) {
+    private Mail mail;
+    public OrderService(Mail mail, OrderRepository orderRepository, UserRepository userRepository, OrderItemsService orderItemsService) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.orderItemsService = orderItemsService;
+        this.mail = mail;
     }
 
     @Transactional
@@ -38,6 +41,8 @@ public class OrderService {
         }
         order.setOrderItems(itemsList);
         var createdOrder = this.orderRepository.save(order);
+        this.mail.sendEmail(createdOrder.getUser().getEmail(), createdOrder.getUser().getName(), createdOrder.toString());
+        this.mail.sendEmail("testador.email.sender@gmail.com", "Sales Department", createdOrder.toString());
         return createdOrder.dto();
     }
 

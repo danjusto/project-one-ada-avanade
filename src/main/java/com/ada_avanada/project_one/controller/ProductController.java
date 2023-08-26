@@ -4,6 +4,7 @@ import com.ada_avanada.project_one.dto.DecrementStockDTO;
 import com.ada_avanada.project_one.dto.ProductDTO;
 import com.ada_avanada.project_one.dto.SearchDTO;
 import com.ada_avanada.project_one.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDTO create(@RequestBody ProductDTO body) {
+    public ProductDTO create(@RequestBody @Valid ProductDTO body) {
         return productService.create(body);
     }
 
@@ -34,12 +35,12 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ProductDTO edit(@PathVariable Long id, @RequestBody ProductDTO body) {
+    public ProductDTO edit(@PathVariable Long id, @RequestBody @Valid ProductDTO body) {
         return productService.edit(id, body);
     }
 
     @PatchMapping("/{id}/stock")
-    public ProductDTO edit(@PathVariable Long id, @RequestBody DecrementStockDTO body) {
+    public ProductDTO edit(@PathVariable Long id, @RequestBody @Valid DecrementStockDTO body) {
         return productService.decrementStock(id, body);
     }
 

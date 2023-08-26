@@ -30,7 +30,7 @@ public class UserService {
     }
 
     public List<UserResponseDTO> getAll() {
-        return this.userRepository.findAllByOrderByIdAsc().stream().map(User::dto).toList();
+        return this.userRepository.findAllByOrderByIdAsc().stream().map(User::dtoToGetAll).toList();
     }
 
     public UserResponseDTO getOne(Long id) {

@@ -3,6 +3,7 @@ package com.ada_avanada.project_one.controller;
 import com.ada_avanada.project_one.dto.AddressRequestDTO;
 import com.ada_avanada.project_one.dto.AddressResponseDTO;
 import com.ada_avanada.project_one.service.AddressService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class AddressController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AddressResponseDTO create(@RequestBody AddressRequestDTO body) {
+    public AddressResponseDTO create(@RequestBody @Valid AddressRequestDTO body) {
         return service.create(body);
     }
 
@@ -39,7 +40,7 @@ public class AddressController {
     }
 
     @PutMapping("/{id}")
-    public AddressResponseDTO edit(@PathVariable Long id, @RequestBody AddressRequestDTO body) {
+    public AddressResponseDTO edit(@PathVariable Long id, @RequestBody @Valid AddressRequestDTO body) {
         return service.edit(id, body);
     }
 }

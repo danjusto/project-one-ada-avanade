@@ -53,6 +53,10 @@ public class User implements UserDetails {
         return new UserResponseDTO(this.id, this.name, this.username, this.cpf, this.email, this.phone, this.registerDate, this.addresses.stream().map(Address::dto).toList(), this.orders.stream().map(Order::dto).toList());
     }
 
+    public UserResponseDTO dtoToGetAll() {
+        return new UserResponseDTO(this.id, this.name, this.username, this.cpf, this.email, this.phone, this.registerDate);
+    }
+
     public void edit(UserRequestDTO dto) {
         if (dto.name() != null) {
             this.name = dto.name();

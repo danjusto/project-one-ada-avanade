@@ -23,7 +23,6 @@ public class ProductService {
 
     @Transactional
     public ProductDTO create(ProductDTO dto) {
-        System.out.println(dto);
         var newProduct = new Product(dto);
         var productCreated = this.productRepository.save(newProduct);
         return productCreated.dto();

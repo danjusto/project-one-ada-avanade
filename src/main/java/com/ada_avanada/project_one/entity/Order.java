@@ -47,4 +47,9 @@ public class Order {
     public void edit(OrderDTO dto) {
         this.totalPrice = dto.totalPrice();
     }
+
+    @Override
+    public String toString() {
+        return "Order #" + this.id + " successfully registered";
+    }
 }

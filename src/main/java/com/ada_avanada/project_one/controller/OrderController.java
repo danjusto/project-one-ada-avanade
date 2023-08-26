@@ -2,6 +2,7 @@ package com.ada_avanada.project_one.controller;
 
 import com.ada_avanada.project_one.dto.OrderDTO;
 import com.ada_avanada.project_one.service.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderDTO create(@RequestBody OrderDTO body) {
+    public OrderDTO create(@RequestBody @Valid OrderDTO body) {
         return orderService.create(body);
     }
 
@@ -38,7 +39,7 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}")
-    public OrderDTO edit(@PathVariable Long id, @RequestBody OrderDTO body) {
+    public OrderDTO edit(@PathVariable Long id, @RequestBody @Valid OrderDTO body) {
         return orderService.edit(id, body);
     }
 }
