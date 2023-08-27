@@ -60,7 +60,7 @@ IDE:
 
 4. Rode a aplicação que o sistema já irá criar as tabelas e popular a tabela produtos automaticamente, deixando-as prontas para uso. Por padrão, a aplicação rodará na porta 8080.
 
-5. Você precisará de uma ferramenta de teste de requisições como o [Insomnia](https://insomnia.rest/), devendo seguir as orientações da documentação abaixo para utilizar a API.
+5. Você precisará de uma ferramenta de teste de requisições como o [Insomnia](https://insomnia.rest/) ou utilizar o [Swagger-Ui](http://localhost:8080/swagger-ui/index.html), devendo seguir as orientações da documentação abaixo para utilizar a API.
 
 6. Você pode rodar os testes automatizados criados com JUnit, caso queira (mais testes em desenvolvimento).
 

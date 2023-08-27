@@ -3,6 +3,7 @@ package com.ada_avanada.project_one.controller;
 import com.ada_avanada.project_one.dto.AddressRequestDTO;
 import com.ada_avanada.project_one.dto.AddressResponseDTO;
 import com.ada_avanada.project_one.service.AddressService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/address")
+@SecurityRequirement(name = "bearer-key")
 public class AddressController {
     private AddressService service;
     public AddressController(AddressService service) {

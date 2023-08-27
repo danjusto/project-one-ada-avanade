@@ -5,6 +5,7 @@ import com.ada_avanada.project_one.dto.ProductDTO;
 import com.ada_avanada.project_one.dto.ProductEditDTO;
 import com.ada_avanada.project_one.dto.SearchDTO;
 import com.ada_avanada.project_one.service.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDTO create(@RequestBody @Valid ProductDTO body) {
@@ -35,11 +37,13 @@ public class ProductController {
         return productService.getOne(id);
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @PutMapping("/{id}")
     public ProductDTO edit(@PathVariable Long id, @RequestBody @Valid ProductEditDTO body) {
         return productService.edit(id, body);
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove(@PathVariable Long id) {

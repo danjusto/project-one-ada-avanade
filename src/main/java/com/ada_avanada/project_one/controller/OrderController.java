@@ -2,6 +2,7 @@ package com.ada_avanada.project_one.controller;
 
 import com.ada_avanada.project_one.dto.OrderDTO;
 import com.ada_avanada.project_one.service.OrderService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/order")
+@SecurityRequirement(name = "bearer-key")
 public class OrderController {
     private OrderService orderService;
     public OrderController(OrderService orderService) {
