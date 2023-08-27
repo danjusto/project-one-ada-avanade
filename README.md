@@ -302,6 +302,27 @@ Caso o endereço seja cadastrado junto com o registro do usuário, deve seguir o
 | state      | não             | `string` | Estado                 |
 | country    | não             | `string` | País                   |
 
+Exemplo de requisição:
+
+```json
+{
+   "name": "Fulano",
+   "username": "fulano",
+   "password": "password",
+   "cpf": "12345678910",
+   "email": "fulano@email.com",
+   "phone": "11999998888",
+   "address": {
+      "street": "Rua 1",
+      "number": "111 apto 11",
+      "postalCode": "12345678",
+      "city": "Cidade 1",
+      "state": "Estado 1",
+      "country": "País 1"
+   }
+}
+```
+
 <br />
 
 > **_NOTA:_**  Não é necessário enviar Token JWT via Authorization Header.
