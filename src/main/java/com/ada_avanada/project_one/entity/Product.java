@@ -2,6 +2,7 @@ package com.ada_avanada.project_one.entity;
 
 import com.ada_avanada.project_one.dto.DecrementStockDTO;
 import com.ada_avanada.project_one.dto.ProductDTO;
+import com.ada_avanada.project_one.dto.ProductEditDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +36,7 @@ public class Product {
     public ProductDTO dto() {
         return new ProductDTO(this.id, this.title, this.description, this.price, this.stock, this.brand, this.category);
     }
-    public void edit(ProductDTO dto) {
+    public void edit(ProductEditDTO dto) {
         if (dto.title() != null) {
             this.title = dto.title();
         }

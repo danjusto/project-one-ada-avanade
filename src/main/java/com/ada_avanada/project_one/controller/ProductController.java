@@ -2,6 +2,7 @@ package com.ada_avanada.project_one.controller;
 
 import com.ada_avanada.project_one.dto.DecrementStockDTO;
 import com.ada_avanada.project_one.dto.ProductDTO;
+import com.ada_avanada.project_one.dto.ProductEditDTO;
 import com.ada_avanada.project_one.dto.SearchDTO;
 import com.ada_avanada.project_one.service.ProductService;
 import jakarta.validation.Valid;
@@ -35,7 +36,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ProductDTO edit(@PathVariable Long id, @RequestBody @Valid ProductDTO body) {
+    public ProductDTO edit(@PathVariable Long id, @RequestBody @Valid ProductEditDTO body) {
         return productService.edit(id, body);
     }
 

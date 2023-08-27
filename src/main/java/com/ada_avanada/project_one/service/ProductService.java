@@ -2,8 +2,10 @@ package com.ada_avanada.project_one.service;
 
 import com.ada_avanada.project_one.dto.DecrementStockDTO;
 import com.ada_avanada.project_one.dto.ProductDTO;
+import com.ada_avanada.project_one.dto.ProductEditDTO;
 import com.ada_avanada.project_one.dto.SearchDTO;
 import com.ada_avanada.project_one.entity.Product;
+import com.ada_avanada.project_one.exception.AppException;
 import com.ada_avanada.project_one.repository.ProductFilterRepository;
 import com.ada_avanada.project_one.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,6 +25,10 @@ public class ProductService {
 
     @Transactional
     public ProductDTO create(ProductDTO dto) {
+        var checkProductExists = this.productRepository.findByTitleAndBrandAndCategory(dto.title(), dto.brand(), dto.category());
+        if (checkProductExists.isPresent()) {
+            throw new AppException("Product already exist");
+        }
         var newProduct = new Product(dto);
         var productCreated = this.productRepository.save(newProduct);
         return productCreated.dto();
@@ -41,7 +47,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDTO edit(Long id, ProductDTO dto) {
+    public ProductDTO edit(Long id, ProductEditDTO dto) {
         var productOp = this.productRepository.findById(id);
         if (productOp.isEmpty()) {
             throw new EntityNotFoundException("Product not found.");

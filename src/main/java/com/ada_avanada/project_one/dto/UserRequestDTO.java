@@ -17,7 +17,7 @@ public record UserRequestDTO(
         @Email
         String email,
         @NotBlank
-        @Pattern(regexp = "^\\d{11}$")
+        @Pattern(regexp = "^\\d{10,11}$")
         String phone,
         @NotNull
         @Valid

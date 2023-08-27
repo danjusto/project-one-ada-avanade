@@ -1,5 +1,6 @@
 package com.ada_avanada.project_one.service;
 
+import com.ada_avanada.project_one.dto.UserEditDTO;
 import com.ada_avanada.project_one.dto.UserRequestDTO;
 import com.ada_avanada.project_one.dto.UserResponseDTO;
 import com.ada_avanada.project_one.entity.User;
@@ -52,7 +53,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDTO edit(Long id, UserRequestDTO dto) {
+    public UserResponseDTO edit(Long id, UserEditDTO dto) {
         Optional<User> userOptional = this.userRepository.findById(id);
         if (userOptional.isEmpty()) {
             throw new EntityNotFoundException("User not found.");

@@ -1,5 +1,6 @@
 package com.ada_avanada.project_one.entity;
 
+import com.ada_avanada.project_one.dto.UserEditDTO;
 import com.ada_avanada.project_one.dto.UserRequestDTO;
 import com.ada_avanada.project_one.dto.UserResponseDTO;
 import jakarta.persistence.*;
@@ -57,7 +58,7 @@ public class User implements UserDetails {
         return new UserResponseDTO(this.id, this.name, this.username, this.cpf, this.email, this.phone, this.registerDate);
     }
 
-    public void edit(UserRequestDTO dto) {
+    public void edit(UserEditDTO dto) {
         if (dto.name() != null) {
             this.name = dto.name();
         }

@@ -1,5 +1,6 @@
 package com.ada_avanada.project_one.controller;
 
+import com.ada_avanada.project_one.dto.UserEditDTO;
 import com.ada_avanada.project_one.dto.UserRequestDTO;
 import com.ada_avanada.project_one.dto.UserResponseDTO;
 import com.ada_avanada.project_one.service.UserService;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public UserResponseDTO edit(@PathVariable Long id, @RequestBody @Valid UserRequestDTO body) {
+    public UserResponseDTO edit(@PathVariable Long id, @RequestBody @Valid UserEditDTO body) {
         return service.edit(id, body);
     }
 }

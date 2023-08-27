@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -50,7 +51,7 @@ public class FeedDbService {
                     null,
                     product.getString("title"),
                     product.getString("description"),
-                    product.getBigInteger("price"),
+                    product.getBigInteger("price").multiply(BigInteger.valueOf(100)),
                     product.getInt("stock"),
                     product.getString("brand"),
                     product.getString("category")));
