@@ -55,8 +55,4 @@ public class AddressService {
         this.addressRepository.save(addressOptional.get());
         return addressOptional.get().dto();
     }
-
-    public List<AddressResponseDTO> getAll() {
-        return addressRepository.findAllByOrderByIdAsc().stream().map(Address::dto).toList();
-    }
 }

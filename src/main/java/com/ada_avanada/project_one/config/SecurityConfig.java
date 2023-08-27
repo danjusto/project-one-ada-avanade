@@ -3,6 +3,7 @@ package com.ada_avanada.project_one.config;
 import com.ada_avanada.project_one.filter.AuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,10 +28,9 @@ public class SecurityConfig {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(a -> a.requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
-                        /*.requestMatchers(new AntPathRequestMatcher("/auth")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/users",HttpMethod.POST.name())).permitAll()
-                        .anyRequest().authenticated()*/)
+                .authorizeHttpRequests(a -> a.requestMatchers(new AntPathRequestMatcher("/auth", HttpMethod.POST.name())).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user", HttpMethod.POST.name())).permitAll()
+                        .anyRequest().authenticated())
                 .headers(header -> header.frameOptions(frame -> frame.disable()))
                 .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

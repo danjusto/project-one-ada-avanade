@@ -50,8 +50,8 @@ public class FeedDbService {
                     null,
                     product.getString("title"),
                     product.getString("description"),
-                    product.getLong("price"),
-                    product.getLong("stock"),
+                    product.getBigInteger("price"),
+                    product.getInt("stock"),
                     product.getString("brand"),
                     product.getString("category")));
         }

@@ -56,14 +56,4 @@ public class ProductService {
         this.productRepository.deleteById(id);
     }
 
-    @Transactional
-    public ProductDTO decrementStock(Long id, DecrementStockDTO dto) {
-        var productOp = this.productRepository.findById(id);
-        if (productOp.isEmpty()) {
-            throw new EntityNotFoundException("Product not found.");
-        }
-        productOp.get().decrementStock(dto);
-        productRepository.save(productOp.get());
-        return productOp.get().dto();
-    }
 }

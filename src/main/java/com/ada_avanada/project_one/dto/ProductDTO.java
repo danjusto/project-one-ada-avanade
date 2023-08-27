@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigInteger;
+
 public record ProductDTO(
         Long id,
         @NotBlank
@@ -11,10 +13,10 @@ public record ProductDTO(
         String description,
         @NotNull
         @Min(1)
-        Long price,
+        BigInteger price,
         @NotNull
         @Min(1)
-        Long stock,
+        Integer stock,
         String brand,
         @NotBlank
         String category) {

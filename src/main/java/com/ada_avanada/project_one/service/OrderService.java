@@ -3,6 +3,8 @@ package com.ada_avanada.project_one.service;
 import com.ada_avanada.project_one.dto.ItemsProductDTO;
 import com.ada_avanada.project_one.dto.OrderDTO;
 import com.ada_avanada.project_one.entity.Order;
+import com.ada_avanada.project_one.entity.Product;
+import com.ada_avanada.project_one.exception.AppException;
 import com.ada_avanada.project_one.repository.OrderRepository;
 import com.ada_avanada.project_one.repository.ProductRepository;
 import com.ada_avanada.project_one.repository.UserRepository;
@@ -11,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +36,26 @@ public class OrderService {
         if (userOp.isEmpty()) {
             throw new EntityNotFoundException("User not found");
         }
-        var order = new Order(dto, userOp.get());
+        var order = new Order(userOp.get());
         var itemsList = new ArrayList<ItemsProductDTO>();
         for (var element : dto.orderItems()) {
             var item = this.orderItemsService.create(element, order);
             itemsList.add(item);
         }
+
+        for (var item : itemsList) {
+            if (!this.orderItemsService.checkStock(item.qty(), item.product())) {
+                throw new AppException("No stock available");
+            };
+        }
+
+        var totalPrice = BigInteger.valueOf(0);
+        for (var item : itemsList) {
+            totalPrice = totalPrice.add(item.product().getPrice().multiply(BigInteger.valueOf(item.qty())));
+            this.orderItemsService.decrementStock(item.qty(), item.product());
+        }
+
+        order.setTotalPrice(totalPrice);
         order.setOrderItems(itemsList);
         var createdOrder = this.orderRepository.save(order);
         this.mail.sendEmail(createdOrder.getUser().getEmail(), createdOrder.getUser().getName(), createdOrder.toString());
@@ -63,14 +80,4 @@ public class OrderService {
         this.orderRepository.deleteById(id);
     }
 
-    @Transactional
-    public OrderDTO edit(Long id, OrderDTO dto) {
-        var orderOp = this.orderRepository.findById(id);
-        if(orderOp.isEmpty()) {
-            throw new EntityNotFoundException("Order not found");
-        }
-        orderOp.get().edit(dto);
-        this.orderRepository.save(orderOp.get());
-        return orderOp.get().dto();
-    }
 }

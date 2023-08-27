@@ -3,6 +3,7 @@ package com.ada_avanada.project_one.service;
 import com.ada_avanada.project_one.dto.UserRequestDTO;
 import com.ada_avanada.project_one.dto.UserResponseDTO;
 import com.ada_avanada.project_one.entity.User;
+import com.ada_avanada.project_one.exception.AppException;
 import com.ada_avanada.project_one.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,10 @@ public class UserService {
 
     @Transactional
     public UserResponseDTO create(UserRequestDTO dto) {
+        var checkUserExists = this.userRepository.findByUsernameOrCpfOrEmail(dto.username(), dto.cpf(), dto.email());
+        if (checkUserExists.isPresent()) {
+            throw new AppException("User already exists.");
+        }
         var user = new User(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         var registeredUser = this.userRepository.save(user);

@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +25,13 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
     private LocalDateTime orderDate;
-    private Long totalPrice;
+    private BigInteger totalPrice;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItems> orderItems = new ArrayList<OrderItems>();
 
-    public Order(OrderDTO dto, User user) {
+    public Order(User user) {
         this.user = user;
         this.orderDate = LocalDateTime.now();
-        this.totalPrice = dto.totalPrice();
     }
 
     public void setOrderItems(List<ItemsProductDTO> items) {
@@ -40,12 +40,12 @@ public class Order {
         }
     }
 
-    public OrderDTO dto() {
-        return new OrderDTO(this.id, this.user.getId(), this.orderDate, this.totalPrice, this.orderItems.stream().map(OrderItems::dto).toList());
+    public void setTotalPrice(BigInteger totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public void edit(OrderDTO dto) {
-        this.totalPrice = dto.totalPrice();
+    public OrderDTO dto() {
+        return new OrderDTO(this.id, this.user.getId(), this.orderDate, this.totalPrice, this.orderItems.stream().map(OrderItems::dto).toList());
     }
 
     @Override

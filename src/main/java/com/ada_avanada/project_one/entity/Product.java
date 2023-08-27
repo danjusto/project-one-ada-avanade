@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
+
 @Entity
 @Table(name = "products")
 @Getter
@@ -16,8 +18,8 @@ public class Product {
     private Long id;
     private String title;
     private String description;
-    private Long price;
-    private Long stock;
+    private BigInteger price;
+    private Integer stock;
     private String brand;
     private String category;
 
@@ -53,7 +55,7 @@ public class Product {
             this.category = dto.category();
         }
     }
-    public void decrementStock(DecrementStockDTO dto) {
-        this.stock -= dto.qty();
+    public void decrementStock(Integer qty) {
+        this.stock -= qty;
     }
 }

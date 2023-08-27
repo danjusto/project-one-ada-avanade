@@ -28,11 +28,6 @@ public class AddressController {
         return service.getOne(id);
     }
 
-    @GetMapping
-    public List<AddressResponseDTO> getAll() {
-        return service.getAll();
-    }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove(@PathVariable Long id) {

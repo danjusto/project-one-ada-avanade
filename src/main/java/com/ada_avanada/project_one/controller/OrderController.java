@@ -37,9 +37,4 @@ public class OrderController {
     public void remove(@PathVariable Long id) {
         orderService.remove(id);
     }
-
-    @PatchMapping("/{id}")
-    public OrderDTO edit(@PathVariable Long id, @RequestBody @Valid OrderDTO body) {
-        return orderService.edit(id, body);
-    }
 }

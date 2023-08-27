@@ -39,11 +39,6 @@ public class ProductController {
         return productService.edit(id, body);
     }
 
-    @PatchMapping("/{id}/stock")
-    public ProductDTO edit(@PathVariable Long id, @RequestBody @Valid DecrementStockDTO body) {
-        return productService.decrementStock(id, body);
-    }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove(@PathVariable Long id) {
