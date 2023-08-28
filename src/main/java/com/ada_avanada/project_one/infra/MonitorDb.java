@@ -16,6 +16,9 @@ public class MonitorDb {
 
     @PostConstruct
     public void init() throws URISyntaxException, IOException, InterruptedException {
+        if (this.feedDbService.userTableEmpty()) {
+            this.feedDbService.createAdmin();
+        }
         if (this.feedDbService.productTableEmpty()) {
             this.feedDbService.feedDb();
         }

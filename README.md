@@ -18,8 +18,6 @@ A API Shop-Orders tem como objetivo persistir dados para gerenciamento de pedido
 * Com usuário logado, o sistema permite a criação de pedido, validando o estoque de produtos antes de armazenar o pedido;
 * Sistema atualiza o estoque automaticamente e encaminha e-mail de confirmação do pedido ao usuário;
 
-Obs.: O sistema será aprimorado para suportar autenticação de adminsitrador para gerenciar alguns endpoints (user: get, delete / product: post, put, delete / order: get, get:id, delete).
-
 ## 2. 💻 Tecnologias usadas
 <div align="center">
 
@@ -72,11 +70,12 @@ IDE:
 <br/><br/>
 
 **User** <br/>
-[`GET /user/`](#get-user) - Listagem de usuários <br/>
+[`GET /user/`](#get-user) - Listagem de usuários **(Rota apenas para Admin)** <br/>
 [`GET /user/:id`](#get-user-id) - Detalhamento de um usuário <br/>
 [`POST /user/`](#post-user) - Criação de um novo usuário <br/>
 [`PATCH /user/:id`](#patch-user) - Atualização de dados de um usuário <br/>
-[`DELETE /user/:id`](#delete-user) - Deleção de um usuário
+[`PATCH /user/admin/:id`](#patch-user-admin-id) - Conceder credencial de Admin para usuário **(Rota apenas para Admin)** <br/>
+[`DELETE /user/:id`](#delete-user) - Deleção de um usuário **(Rota apenas para Admin)**
 <br/><br/>
 
 **Address** <br/>
@@ -89,16 +88,16 @@ IDE:
 **Product** <br/>
 [`GET /product/`](#get-products) - Listagem de produtos com parâmetros <br/>
 [`GET /product/:id`](#get-products-id) - Detalhamento um de produto <br/>
-[`POST /product/`](#post-products) - Criação de um novo produto <br/>
-[`PUT /product/:id`](#put-products) - Atualização de dados de um produto <br/>
-[`DELETE /product/:id`](#delete-products) - Deleção de um produto
+[`POST /product/`](#post-products) - Criação de um novo produto **(Rota apenas para Admin)** <br/>
+[`PUT /product/:id`](#put-products) - Atualização de dados de um produto **(Rota apenas para Admin)** <br/>
+[`DELETE /product/:id`](#delete-products) - Deleção de um produto **(Rota apenas para Admin)**
 <br/><br/>
 
 **Order** <br/>
-[`GET /order/`](#get-order) - Listagem de pedidos <br/>
+[`GET /order/`](#get-order) - Listagem de pedidos **(Rota apenas para Admin)** <br/>
 [`GET /order/:id`](#get-order-id) - Detalhamento de um pedido <br/>
 [`POST /order/`](#post-order) - Criação de um novo pedido <br/>
-[`DELETE /order/:id`](#delete-order) - Deleção de um pedido
+[`DELETE /order/:id`](#delete-order) - Deleção de um pedido **(Rota apenas para Admin)**
 <br/><br/>
 
 ###
@@ -151,7 +150,7 @@ Listar todos os usuários
 
 <br />
 
-> **_NOTA:_**  É necessário enviar Token JWT via Authorization Header (rota que será exclusiva de administrador futuramente).
+> **_NOTA:_**  É necessário enviar Token JWT via Authorization Header **(rota exclusiva de administrador)**.
 
 <br />
 
@@ -465,6 +464,41 @@ Erros comuns
 <br/>
 
 ###
+#### PATCH user-admin-id
+
+**Request**
+
+Conceder credencial de Admin para um usuário
+
+|**Nome**|**Obrigatório**|**Tipo**|**Descrição**|
+| :------------ | :------------ | :------------ | :------------ |
+|id|sim|`number`|Enviar via parâmetro de rota|
+
+<br />
+
+> **_NOTA:_**  É necessário enviar Token JWT via Authorization Header.
+
+<br />
+
+**Response**
+
+Sucesso
+```no body returned for response``` <br/>
+```status: 200```
+
+<br /><br />
+Erro comum
+
+```json
+{
+   "message": "User not found."
+}
+```
+```status: 404```
+
+<br/>
+
+###
 #### DELETE user
 
 Deletar um usuário
@@ -477,7 +511,7 @@ Deletar um usuário
 
 <br />
 
-> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header (rota que será exclusiva de administrador futuramente).
+> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header **(rota exclusiva de administrador)**.
 
 <br />
 
@@ -802,7 +836,7 @@ Cadastrar um produto
 
 <br />
 
-> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header (rota que será exclusiva de administrador futuramente).
+> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header **(rota exclusiva de administrador)**.
 
 <br />
 
@@ -859,7 +893,7 @@ Editar um produto
 
 <br />
 
-> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header (rota que será exclusiva de administrador futuramente).
+> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header **(rota exclusiva de administrador)**.
 
 <br />
 
@@ -911,7 +945,7 @@ Deletar um produto
 
 <br />
 
-> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header (rota que será exclusiva de administrador futuramente).
+> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header **(rota exclusiva de administrador)**.
 
 <br />
 
@@ -945,7 +979,7 @@ Listar pedidos
 
 <br />
 
-> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header (rota que será exclusiva de administrador futuramente).
+> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header **(rota exclusiva de administrador)**.
 
 <br />
 
@@ -1162,7 +1196,7 @@ Erros comuns
 
 <br />
 
-> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header ((rota que será exclusiva de administrador futuramente).
+> **_NOTA:_**  É necessário enviar Token JWT de *Admin* via Authorization Header **(rota exclusiva de administrador)**.
 
 <br />
 

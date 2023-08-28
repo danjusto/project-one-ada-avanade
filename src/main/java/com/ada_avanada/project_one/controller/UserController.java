@@ -50,4 +50,10 @@ public class UserController {
     public UserResponseDTO edit(@PathVariable Long id, @RequestBody @Valid UserEditDTO body) {
         return service.edit(id, body);
     }
+
+    @SecurityRequirement(name = "bearer-key")
+    @PatchMapping("/admin/{id}")
+    public void edit(@PathVariable Long id) {
+        service.setAdmin(id);
+    }
 }

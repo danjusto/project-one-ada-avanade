@@ -3,11 +3,13 @@ package com.ada_avanada.project_one.entity;
 import com.ada_avanada.project_one.dto.UserEditDTO;
 import com.ada_avanada.project_one.dto.UserRequestDTO;
 import com.ada_avanada.project_one.dto.UserResponseDTO;
+import com.ada_avanada.project_one.infra.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
@@ -39,6 +41,8 @@ public class User implements UserDetails {
     private List<Address> addresses = new ArrayList<Address>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Order> orders = new ArrayList<Order>();
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public User(UserRequestDTO dto) {
         this.name = dto.name();
@@ -48,6 +52,7 @@ public class User implements UserDetails {
         this.email = dto.email();
         this.phone = dto.phone();
         this.addresses.add(new Address(dto.address(), this));
+        this.role = Role.CLIENT;
     }
 
     public UserResponseDTO dto() {
@@ -56,6 +61,10 @@ public class User implements UserDetails {
 
     public UserResponseDTO dtoToGetAll() {
         return new UserResponseDTO(this.id, this.name, this.username, this.cpf, this.email, this.phone, this.registerDate);
+    }
+
+    public void setAdmin(Role role) {
+        this.role = Role.ADMIN;
     }
 
     public void edit(UserEditDTO dto) {
@@ -75,7 +84,9 @@ public class User implements UserDetails {
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(getRole().toString()));
+        return authorities;
     }
 
     @Override

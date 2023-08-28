@@ -5,6 +5,7 @@ import com.ada_avanada.project_one.dto.UserRequestDTO;
 import com.ada_avanada.project_one.dto.UserResponseDTO;
 import com.ada_avanada.project_one.entity.User;
 import com.ada_avanada.project_one.exception.AppException;
+import com.ada_avanada.project_one.infra.Role;
 import com.ada_avanada.project_one.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -61,5 +62,14 @@ public class UserService {
         userOptional.get().edit(dto);
         userRepository.save(userOptional.get());
         return userOptional.get().dto();
+    }
+
+    public void setAdmin(Long id) {
+        Optional<User> userOptional = this.userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new EntityNotFoundException("User not found.");
+        }
+        userOptional.get().setAdmin(Role.ADMIN);
+        userRepository.save(userOptional.get());
     }
 }
