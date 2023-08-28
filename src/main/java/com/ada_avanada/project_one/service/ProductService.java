@@ -27,7 +27,7 @@ public class ProductService {
     public ProductDTO create(ProductDTO dto) {
         var checkProductExists = this.productRepository.findByTitleAndBrandAndCategory(dto.title(), dto.brand(), dto.category());
         if (checkProductExists.isPresent()) {
-            throw new AppException("Product already exist");
+            throw new AppException("Product already exist.");
         }
         var newProduct = new Product(dto);
         var productCreated = this.productRepository.save(newProduct);
@@ -59,6 +59,10 @@ public class ProductService {
 
     @Transactional
     public void remove(Long id) {
+        var productOp = this.productRepository.findById(id);
+        if (productOp.isEmpty()) {
+            throw new EntityNotFoundException("Product not found.");
+        }
         this.productRepository.deleteById(id);
     }
 

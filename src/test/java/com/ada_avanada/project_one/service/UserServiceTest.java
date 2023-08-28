@@ -62,7 +62,9 @@ class UserServiceTest {
     @Test
     @DisplayName("When create Then return a created user")
     void create() {
+        when(userRepository.findByUsernameOrCpfOrEmail(any(), any(), any())).thenReturn(Optional.empty());
         when(userRepository.save(any())).thenReturn(user);
+
         var response = service.create(requestDTO);
 
         assertNotNull(response);
@@ -72,7 +74,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("When create Then return a created user")
+    @DisplayName("When create with existing email, cpf or username Then return an app exception")
     void createFail() {
         when(userRepository.findByUsernameOrCpfOrEmail(requestDTO.username(), requestDTO.cpf(), requestDTO.email())).thenReturn(userOptional);
         try {
@@ -109,7 +111,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("When find by id Then return an entity not found exception")
-    void getOneEx() {
+    void getOneFail() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         try {
             service.getOne(ID);
@@ -156,6 +158,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("When set admin Then return a user with role admin")
     void setAdmin() {
         when(userRepository.findById(anyLong())).thenReturn(userOptional);
         when(userRepository.save(userOptional.get())).thenReturn(user);
