@@ -3,6 +3,7 @@ package com.ada_avanada.project_one.controller;
 import com.ada_avanada.project_one.dto.UserEditDTO;
 import com.ada_avanada.project_one.dto.UserRequestDTO;
 import com.ada_avanada.project_one.dto.UserResponseDTO;
+import com.ada_avanada.project_one.entity.User;
 import com.ada_avanada.project_one.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;

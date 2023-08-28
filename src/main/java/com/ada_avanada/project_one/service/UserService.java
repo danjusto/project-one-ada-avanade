@@ -50,6 +50,10 @@ public class UserService {
 
     @Transactional
     public void remove(Long id) {
+        Optional<User> userOptional = this.userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new EntityNotFoundException("User not found.");
+        }
         this.userRepository.deleteById(id);
     }
 
@@ -59,17 +63,22 @@ public class UserService {
         if (userOptional.isEmpty()) {
             throw new EntityNotFoundException("User not found.");
         }
+        var checkEmailExists = this.userRepository.findByEmail(dto.email());
+        if (checkEmailExists.isPresent() && !checkEmailExists.get().getId().equals(id)) {
+            throw new AppException("Email already in use.");
+        }
         userOptional.get().edit(dto);
-        userRepository.save(userOptional.get());
-        return userOptional.get().dto();
+        var editedUser = userRepository.save(userOptional.get());
+        return editedUser.dto();
     }
 
-    public void setAdmin(Long id) {
+    public User setAdmin(Long id) {
         Optional<User> userOptional = this.userRepository.findById(id);
         if (userOptional.isEmpty()) {
             throw new EntityNotFoundException("User not found.");
         }
         userOptional.get().setAdmin(Role.ADMIN);
-        userRepository.save(userOptional.get());
+        var newAdmin = userRepository.save(userOptional.get());
+        return newAdmin;
     }
 }
