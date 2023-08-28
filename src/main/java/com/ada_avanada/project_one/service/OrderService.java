@@ -77,6 +77,10 @@ public class OrderService {
 
     @Transactional
     public void remove(Long id) {
+        var orderOp = this.orderRepository.findById(id);
+        if(orderOp.isEmpty()) {
+            throw new EntityNotFoundException("Order not found");
+        }
         this.orderRepository.deleteById(id);
     }
 

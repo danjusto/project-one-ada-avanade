@@ -52,6 +52,14 @@ public class ProductService {
         if (productOp.isEmpty()) {
             throw new EntityNotFoundException("Product not found.");
         }
+
+        var checkProductExists = this.productRepository.findByTitleAndBrandAndCategory(
+                dto.title() != null ? dto.title() : productOp.get().getTitle(),
+                dto.brand() != null ? dto.brand() : productOp.get().getBrand(),
+                dto.category() != null ? dto.category() : productOp.get().getCategory());
+        if (checkProductExists.isPresent()) {
+            throw new AppException("Product already exist.");
+        }
         productOp.get().edit(dto);
         productRepository.save(productOp.get());
         return productOp.get().dto();

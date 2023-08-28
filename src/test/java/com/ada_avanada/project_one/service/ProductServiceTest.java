@@ -139,13 +139,26 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("When update with inexist id Then return an entity not found exception")
-    void editFail() {
+    void editFailId() {
         when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
         try {
             service.edit(ID, editDTO);
         } catch (Exception e) {
             assertEquals(EntityNotFoundException.class, e.getClass());
             assertEquals("Product not found.", e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("When update with a combination of data Then return an app exception")
+    void editFailSameProduct() {
+        when(productRepository.findById(anyLong())).thenReturn(productOptional);
+        when(productRepository.findByTitleAndBrandAndCategory(any(), any(), any())).thenReturn(productOptional);
+        try {
+            service.edit(ID, editDTO);
+        } catch (Exception e) {
+            assertEquals(AppException.class, e.getClass());
+            assertEquals("Product already exist.", e.getMessage());
         }
     }
 
